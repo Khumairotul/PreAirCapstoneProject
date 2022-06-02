@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Pre Air</string>
+    <string name="opening">Supported By : Bangkit Academy</string>
+    <string name="check">Check air condition</string>
+    <string name="take_a_picture">Take a picture</string>
+    <string name="opening_home_text_view">We have something for you !</string>
+    <string name="avatar">avatar</string>
+    <string name="description">Lihat Ini !</string>
+    <string name="take_again">Take photo again</string>
+    <string name="pick_from_gallery">Pick from gallery</string>
+    <string name="preview">Here are the preview :</string>
+    <string name="what_would_you_like_to_do">What would you like to do?</string>
+    <string name="gallery">Pick from gallery</string>
+    <string name="see_result">See result</string>
+</resources>
