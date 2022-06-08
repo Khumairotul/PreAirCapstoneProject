@@ -1,10 +1,13 @@
 package com.example.preair.camera
 
 import android.Manifest
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -13,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.preair.databinding.ActivityCheckPictureBinding
+import result.ResultActivity
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -50,14 +54,48 @@ class CheckPictureActivity : AppCompatActivity() {
         checkBinding = ActivityCheckPictureBinding.inflate(layoutInflater)
         setContentView(checkBinding.root)
 
+        playAnimation()
+        setPermissionCamera()
+        allButtonAction()
+
+    }
+
+    private fun playAnimation() {
+        val previewText = ObjectAnimator.ofFloat(checkBinding.pvText, View.ALPHA, 1f).setDuration(500)
+        val previewImg = ObjectAnimator.ofFloat(checkBinding.previewImageView, View.ALPHA, 1f). setDuration(500)
+        val askAction = ObjectAnimator.ofFloat(checkBinding.textView3, View.TRANSLATION_Y, 50f, 30f).setDuration(500)
+        val imgGallery = ObjectAnimator.ofFloat(checkBinding.imgTakeGallery, View.TRANSLATION_Y, 1f).setDuration(500)
+        val textGallery = ObjectAnimator.ofFloat(checkBinding.textView, View.TRANSLATION_Y, 1f).setDuration(500)
+        val imgCamera = ObjectAnimator.ofFloat(checkBinding.imgTakeCamera, View.TRANSLATION_Y,1f).setDuration(500)
+        val textCamera = ObjectAnimator.ofFloat(checkBinding.textView4, View.TRANSLATION_Y, 1f).setDuration(500)
+        val imgResult = ObjectAnimator.ofFloat(checkBinding.imgSeeResult, View.TRANSLATION_Y, 1f).setDuration(500)
+        val textResult = ObjectAnimator.ofFloat(checkBinding.textView2, View.TRANSLATION_Y, 1f).setDuration(500)
+
+        val startAnim = AnimatorSet().apply {
+            play(imgGallery).with(textGallery)
+            play(imgCamera).with(textCamera)
+            play(imgResult).with(textResult)
+        }
+
+        AnimatorSet().apply {
+            playSequentially(previewText, previewImg, askAction, startAnim)
+        }.start()
+    }
+
+    private fun setPermissionCamera() {
         if (!allPermissionsGranted()) {
             ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
+    }
 
+    private fun allButtonAction() {
         checkBinding.apply {
-
+            imgTakeGallery.setOnClickListener { startGallery() }
+            imgTakeCamera.setOnClickListener { startCameraX() }
+            imgSeeResult.setOnClickListener {
+                startActivity(Intent(this@CheckPictureActivity, ResultActivity::class.java))
+            }
         }
-
     }
 
     private fun startCameraX() {
@@ -100,6 +138,28 @@ class CheckPictureActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         checkBinding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun startGallery() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "image/*"
+        val chooser = Intent.createChooser(intent, "Choose a Picture")
+        launcherIntentGallery.launch(chooser)
+    }
+
+    private val launcherIntentGallery = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedImg: Uri = result.data?.data as Uri
+
+            val myFile = uriToFile(selectedImg, this@CheckPictureActivity)
+
+            getFile = myFile
+
+            checkBinding.previewImageView.setImageURI(selectedImg)
+        }
     }
 
     companion object {

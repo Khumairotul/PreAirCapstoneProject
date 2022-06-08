@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PreAir">
         <activity
+            android:name="result.ResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".camera.CheckPictureActivity"
             android:exported="false" />
         <activity

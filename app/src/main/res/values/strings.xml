@@ -12,4 +12,15 @@
     <string name="what_would_you_like_to_do">What would you like to do?</string>
     <string name="gallery">Pick from gallery</string>
     <string name="see_result">See result</string>
+    <string name="AQI">Air Quality Index</string>
+    <string name="number">228</string>
+    <string name="label">Dangerous</string>
+    <string name="result_label">Dangerous</string>
+    <string name="satuan_pm10"> pm10 (µgr/m3)</string>
+    <string name="desc">pm10 category determined by dirty
+        air particles from combustion of gasoline, oil, diesel fuel or wood
+        produce. The more pollution in the
+        air, the higher the pm10 number</string>
+    <string name="wear_mask">It is recommended to wear a mask</string>
+    <string name="long_term">Long term exposure to air can lead to health issue</string>
 </resources>
