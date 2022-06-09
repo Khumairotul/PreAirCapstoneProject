@@ -1,5 +1,7 @@
 package com.example.preair.home
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,7 +20,19 @@ class HomeActivity : AppCompatActivity() {
         homeBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
 
+        playAnimation()
         cameraAction()
+    }
+
+    private fun playAnimation() {
+        val textViewEnter = ObjectAnimator.ofFloat(homeBinding.openingTextView, View.TRANSLATION_Y, -5f,18f).setDuration(1000)
+        val rvArticleEnter = ObjectAnimator.ofFloat(homeBinding.rvArticle, View.ALPHA, 1f).setDuration(1000)
+        val fabCamera = ObjectAnimator.ofFloat(homeBinding.fabTakePicture, View.TRANSLATION_X,10f).setDuration(100)
+
+        AnimatorSet().apply {
+            playSequentially(textViewEnter, rvArticleEnter, fabCamera)
+            startDelay = 500
+        }.start()
     }
 
     private fun cameraAction() {
